@@ -2,25 +2,37 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Getting source code from GitHub'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                bat 'python -m py_compile app.py'
+                echo 'Building Python application'
+                bat 'python --version'
+                bat 'python app.py'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running automated unit tests...'
-                bat 'python -m unittest test_app.py'
+                echo 'Running automated tests'
+                bat 'python -m unittest -v test_app.py'
             }
         }
+
     }
+
     post {
         success {
-            echo 'CI Pipeline executed successfully!'
+            echo 'CI/CD Pipeline completed successfully!'
         }
+
         failure {
-            echo 'CI Pipeline failed.'
+            echo 'Pipeline failed. Check the console output.'
         }
     }
 }
